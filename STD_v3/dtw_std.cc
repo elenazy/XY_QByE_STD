@@ -33,7 +33,7 @@ int score_for_one_query(aslp_std::Feature &query, aslp_std::Feature* tests, int 
     std::string query_id = query.GetFeatureId();
     infra::matrix query_feature = query.GetFeature();
     ofstream ofs((result_dir + query_id + ".RESULT").c_str());
-    std::cout << "finish " << query_id << std::endl;
+    //std::cout << "finish " << query_id << std::endl;
     // run over the test set                
     for (int i = 0; i < test_size; i++) {
     //    dynamic programming between query and test[i]

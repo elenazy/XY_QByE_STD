@@ -28,10 +28,9 @@ class XiaoYingWave():
             self.__wav_list={}
         self.__wav_list[wav_id] = float(wav_score)
 
-    def getWav(self, lowscore, highscore, num):
+    def getWav1(self, lowscore, highscore, num):
         if(self.__wav_list==None):
            log.Error("wav-score list is null")
-       
         wav_id_list=[]
         i=0
         while len(wav_id_list) < num:
@@ -47,3 +46,20 @@ class XiaoYingWave():
         if len(wav_id_list) < num:
            log.Error("not enough wav file meet the requirment of score, has: %d, require: %d"%(len(wav_id_list), num))
         return random.sample(wav_id_list, num) 
+    
+    def getWav2(self, lowscore, highscore):
+        if(self.__wav_list==None):
+           log.Error("wav-score list is null")
+        wav_id_list=[]
+        for (wav_id, score) in self.__wav_list.items():
+            if(score > lowscore and score < highscore):
+                wav_id_list.append(wav_id)
+        if len(wav_id_list) < 300:
+           log.Warn("not enough wav file meet the requirment of score, has: %d, require: %d"%(len(wav_id_list), 300))
+        return wav_id_list
+
+    def getWav(self, lowscore, highscore, num=None):
+        if num==None:
+            return self.getWav2(lowscore, highscore)
+        else:
+            return self.getWav1(lowscore, highscore, num)

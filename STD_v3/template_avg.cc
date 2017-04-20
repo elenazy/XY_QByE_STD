@@ -73,7 +73,7 @@ void TemplateAverage(aslp_std::Feature *querys, std::map< std::string, std::vect
         if (it->first == "service") {
             int i=0;
         }
-        std::cout << it->first << (it->second).size() << std::endl;
+        std::cout << it->first << " " <<(it->second).size() << std::endl;
         feature_avg_object.WriteData(out_dir);
     }
 }

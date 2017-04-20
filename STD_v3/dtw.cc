@@ -212,7 +212,7 @@ int AverageTemplate(const infra::matrix &mat_a, const infra::matrix &mat_b, std:
             while (path(i, j) < 3.5 && path(i, j) > 2.5) {
                 j--;
             }
-            Average(mat_a, mat_b, i, k, k-j+1, avg_mat);
+            Average(mat_a, mat_b, i, k, k-j, avg_mat);
             i--;
             j--;
         } else {

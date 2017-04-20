@@ -17,6 +17,6 @@ target_type=$5
 
 for filename in `cat $listfile`; 
 do
-  echo "ffmpeg -i $source_dir/${filename}.${source_type} -y -r $target_dir/${filename}.${target_type}"
+  echo "ffmpeg -i $source_dir/${filename}.${source_type} -ac 1 -ar 8000 -y $target_dir/${filename}.${target_type}"
   ffmpeg -i $source_dir/${filename}.${source_type} -ac 1 -ar 8000 -y $target_dir/${filename}.${target_type}
 done
