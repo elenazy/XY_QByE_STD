@@ -7,7 +7,7 @@ if [ $fea_type = "sbnf" ]; then
     do_mvn=1;
 fi
 
-for x in keywords_native_95_100; #keywords_95_100 keywords_75_80 keywords_55_60 keywords_native;
+for x in keywords_native keywords_95_100; # keywords_75_80 keywords_55_60 keywords_native keywords_native_95_100;
 do
     keyword_dir="/mnt/jyhou/feats/XiaoYing_STD/a_${x}/"
     keyword_list_dir="/mnt/jyhou/feats/XiaoYing_STD/list/"
@@ -15,8 +15,9 @@ do
     keyword_list_file=${keyword_list_dir}${keyword_list_basename}
     
     test_list_file="/mnt/jyhou/feats/XiaoYing_STD/list/utterances.list"
-    ctm_file="/mnt/jyhou/workspace/my_egs/xiaoying_native/s5c/exp/nn_xiaoying_native_ali/ctm"
-    syllable_num_file="keyword_syllable_num.txt" 
+    #ctm_file="/mnt/jyhou/workspace/my_egs/xiaoying_native/s5c/exp/nn_xiaoying_native_ali/ctm"
+    text_file="data/text"
+    syllable_num_file="data/keyword_syllable_num.txt" 
     #keyword_list_file="keyword_debug.list"
     if [ ! -f ${keyword_list_file} ]; then
         echo "ERROR: can not find the keyword list file: $keyword_list_file"
@@ -47,7 +48,7 @@ do
         do
            result_dir=${keyword_dir}dtw_${x}_${fea_type}/
            echo $result_dir
-           python ./script/evaluate.py $result_dir $keyword_list_file $test_list_file $ctm_file $syllable_num_file
+           python ./script/evaluate.py $result_dir $keyword_list_file $test_list_file $text_file $syllable_num_file
         done
     fi
 done

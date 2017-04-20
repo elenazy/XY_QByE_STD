@@ -40,14 +40,9 @@ def build_syllable_num_dict(syllable_num_file):
     return syllable_num_dict
 
 def evaluate(costlist, querylist, doclist, relevant_dict, syllable_num_dict):
-    
     evaluate_matrix = {}
     for x in matrix_list:
         evaluate_matrix[x] = []
-
-    PatNset = []
-    APset = []
-    Pat10set = []
     
     for i in range(len(querylist)):
         ranklist = np.array(costlist[i]).argsort()

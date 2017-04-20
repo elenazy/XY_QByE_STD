@@ -1,13 +1,15 @@
 #!/usr/bin/bash
 stage=3
 core_num=20
-keyword_dir="/mnt/jyhou/feats/XiaoYing_STD/keyword/"
+keyword_dir="/mnt/jyhou/feats/XiaoYing_STD/keywords_native/"
 keyword_list_dir="/mnt/jyhou/feats/XiaoYing_STD/list/"
-keyword_list_basename="keywords.list"
+keyword_list_basename="keywords_native_all.list"
 keyword_list_file=${keyword_list_dir}${keyword_list_basename}
 
 test_list_file="/mnt/jyhou/feats/XiaoYing_STD/list/utterances.list"
-ctm_file="/mnt/jyhou/workspace/my_egs/xiaoying_native/s5c/exp/nn_xiaoying_native_ali/ctm"
+#ctm_file="/mnt/jyhou/workspace/my_egs/xiaoying_native/s5c/exp/nn_xiaoying_native_ali/ctm"
+text_file="data/text"
+syllable_num_file="data/keyword_syllable_num.txt" 
 
 fea_type="sbnf"
 if [ $fea_type = "sbnf" ]; then
@@ -31,7 +33,7 @@ if [ $stage -le 1 ]; then
             for i in `seq $core_num`; do
             {
                 echo "./STD_v3/dtw_std $keyword_dir ./tmp/${keyword_list_basename}${i} $test_dir $test_list_file $fea_type $distance_type $do_mvn $result_dir"
-                      #./STD_v2/dtw_std $keyword_dir ./tmp/${keyword_list_basename}${i} $test_dir $test_list_file $fea_type $distance_type $do_mvn $result_dir
+                      ./STD_v3/dtw_std $keyword_dir ./tmp/${keyword_list_basename}${i} $test_dir $test_list_file $fea_type $distance_type $do_mvn $result_dir
             } &
             done
             wait
@@ -44,7 +46,7 @@ if [ $stage -le 2 ]; then
     do
        result_dir=${keyword_dir}dtw_${x}_${fea_type}/
        echo $result_dir
-       python evaluate.py $result_dir $keyword_list_file $test_list_file $ctm_file
+       python script/evaluate.py $result_dir $keyword_list_file $test_list_file $text_file $syllable_num_file
     done
 fi
 
@@ -53,6 +55,6 @@ if [ $stage -le 3 ]; then
     do
        result_dir=${keyword_dir}dtw_${x}_${fea_type}/
        echo $result_dir
-       python script/evaluate_average.py $result_dir $keyword_list_file $test_list_file $ctm_file
+       python script/evaluate_score_average.py $result_dir $keyword_list_file $test_list_file $text_file $syllable_num_file
     done
 fi
