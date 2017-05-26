@@ -33,7 +33,7 @@ OBJS = $(SRCS:.cc=.o)
 
 #==========================================================#
 
-all: dtw_std template_avg 
+all: dtw_std template_avg template_avg_hierarchical
 
 dtw_std: dtw_std.o $(OBJS) 
 	$(CC) dtw_std.o $(OBJS) $(LFLAGS) -o dtw_std
@@ -41,9 +41,12 @@ dtw_std: dtw_std.o $(OBJS)
 template_avg: template_avg.o $(OBJS)
 	$(CC) template_avg.o $(OBJS) $(LFLAGS) -o template_avg
 
+template_avg_hierarchical: template_avg_hierarchical.o $(OBJS)
+	$(CC) template_avg_hierarchical.o $(OBJS) $(LFLAGS) -o template_avg_hierarchical
+
 %.o: %.cc $(HDRS)
 	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -f *.o dtw_std template_avg
+	rm -f *.o dtw_std template_avg template_avg_hierarchical
 

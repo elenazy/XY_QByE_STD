@@ -1,23 +1,26 @@
 #!/usr/bin/bash
-stage=2
+stage=1
 core_num=20
-fea_type="sbnf"
-if [ $fea_type = "sbnf" ]; then
+    
+keyword_list_dir="/mnt/jyhou/feats/XiaoYing_STD/list/"
+data_list_dir="/mnt/jyhou/feats/XiaoYing_STD/list/"
+
+text_file="/mnt/jyhou/workspace/my_code/Prepare_windows_data/xiaoying_native/text_fixed_tail_500"
+syllable_num_file="data/keyword_syllable_num.txt" 
+
+fea_type="sbnf6"
+
+if [ $fea_type = "sbnf6" ]; then
     distance_type="cosine"
     do_mvn=1;
 fi
-
-for x in keywords_native keywords_95_100; # keywords_75_80 keywords_55_60 keywords_native keywords_native_95_100;
+#for x in keywords_20_60 keywords_60_100 keywords_native keywords_native-keywords_60_100;
+for x in keywords_native-keywords_20_60
 do
     keyword_dir="/mnt/jyhou/feats/XiaoYing_STD/a_${x}/"
-    keyword_list_dir="/mnt/jyhou/feats/XiaoYing_STD/list/"
     keyword_list_basename="${x}_average.list"
     keyword_list_file=${keyword_list_dir}${keyword_list_basename}
     
-    test_list_file="/mnt/jyhou/feats/XiaoYing_STD/list/utterances.list"
-    #ctm_file="/mnt/jyhou/workspace/my_egs/xiaoying_native/s5c/exp/nn_xiaoying_native_ali/ctm"
-    text_file="data/text"
-    syllable_num_file="data/keyword_syllable_num.txt" 
     #keyword_list_file="keyword_debug.list"
     if [ ! -f ${keyword_list_file} ]; then
         echo "ERROR: can not find the keyword list file: $keyword_list_file"
@@ -27,9 +30,10 @@ do
         mkdir -p ./tmp
         python script/split.py ${keyword_list_file} ./tmp/ ${core_num}
         
-        for x in data_55_60 data_75_80 data_95_100;
+        for x in data_15_30 data_40_55 data_65_80;
         do
             test_dir="/mnt/jyhou/feats/XiaoYing_STD/$x/"
+            test_list_file="${data_list_dir}/${x}.list"
             result_dir=${keyword_dir}dtw_${x}_${fea_type}/;
             mkdir -p $result_dir
             for i in `seq $core_num`; do
@@ -44,9 +48,10 @@ do
     fi
     
     if [ $stage -le 2 ]; then
-        for x in data_55_60 data_75_80 data_95_100;
+        for x in data_15_30 data_40_55 data_65_80;
         do
            result_dir=${keyword_dir}dtw_${x}_${fea_type}/
+           test_list_file="${data_list_dir}/${x}.list"
            echo $result_dir
            python ./script/evaluate.py $result_dir $keyword_list_file $test_list_file $text_file $syllable_num_file
         done

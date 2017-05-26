@@ -1,36 +1,28 @@
 import numpy as np
 import sys
-
-TOP=5
 matrix_list = ["all keyword", "unigram keyword", "bigram keyword"]
 
-def m_norm(scorelist):
-    hist, bin_edges = np.histogram(scorelist,40)
-    index = hist.argmax();
-
-    peak = (bin_edges[index] + bin_edges[index+1])/2
-
-    slist_peak = np.array([x for x in scorelist if x >= peak])
-    scorelist = (scorelist - peak)/slist_peak.std()
-
-    return scorelist
-
-def z_norm(scorelist):
-    #scorelist = (np.array(scorelist)-min(scorelist))/(max(scorelist)-min(scorelist))
-    mean = np.mean(scorelist)
-    std  = np.std(scorelist)
-    scorelist = (np.array(scorelist)-mean)/std
-    return scorelist
-
+#def relevant(query, text_id, relevant_dict):
+#    if text_id in relevant_dict[query]:
+#        return True
+#    return False
 def relevant(query, text_id, occurance_dict):
-    if query in occurance_dict[text_id]:
+    if query in relevant_dict[text_id]:
         return True
     return False
 
+#def build_relevant_dict(ctm_file):
+#    relevant_dict = {}
+#    for line in open(ctm_file).readlines():
+#        fields = line.strip().split()
+#        keyword_id = fields[4]
+#        text_id = fields[0]
+#        if not relevant_dict.has_key(keyword_id):
+#            relevant_dict[keyword_id]=[]
+#        relevant_dict[keyword_id].append(text_id)
+#    return relevant_dict
+
 def build_occurance_dict(keywords_list, text_file):
-    keywords_list_uniq = set()
-    for keyword in keywords_list:
-        keywords_list_uniq.add(keyword.strip().split("_")[0])
     occurance_dict = {}
     for line in open(text_file).readlines():
         fields = line.strip().split()
@@ -38,16 +30,28 @@ def build_occurance_dict(keywords_list, text_file):
         single_words = fields[1:]
         occurance_dict[text_id] = set()
         for i in range(len(single_words)):
-            if single_words[i] in keywords_list_uniq:
+            if single_words[i] in keywords_list:
                 occurance_dict[text_id].add(single_words[i])
 
         for i in range(len(single_words)-1):
             word1 = single_words[i]
             word2 = single_words[i+1]
             phrase = word1 + "-" + word2
-            if phrase in keywords_list_uniq:
+            if phrase in keywords_list:
                 occurance_dict[text_id].add(phrase)
     return occurance_dict
+
+#def build_relevant_dict(text_file):
+#    relevant_dict = {}
+#    for line in open(text_file).readlines():
+#        fields = line.strip().split()
+#        text_id = fields[0]
+#        for i in range(1, len(fields)):
+#            keyword_id = fields[i]
+#            if not relevant_dict.has_key(keyword_id):
+#                relevant_dict[keyword_id]=set()
+#            relevant_dict[keyword_id].add(text_id)
+#    return relevant_dict
 
 def build_syllable_num_dict(syllable_num_file):
     syllable_num_dict = {}
@@ -80,15 +84,20 @@ def evaluate(costlist, querylist, doclist, relevant_dict, syllable_num_dict):
             if isRele == True:
                 sum_precision += Precision[-1]
         N = int(num_rele)
-        if N == 0:
-            continue
-
-        if (keyword_id.find("-") > 0):
-            evaluate_matrix["bigram keyword"].append([sum_precision/N, Precision[N-1], Precision[TOP-1]])
+        if (syllable_num_dict[keyword_id] == 1):
+            evaluate_matrix["1_syllable"].append([sum_precision/N, Precision[N-1], Precision[9]])
+        elif (syllable_num_dict[keyword_id] == 2):
+            evaluate_matrix["2_syllable"].append([sum_precision/N, Precision[N-1], Precision[9]])
+        elif (syllable_num_dict[keyword_id] == 3):
+            evaluate_matrix["3_syllable"].append([sum_precision/N, Precision[N-1], Precision[9]])
+        elif (syllable_num_dict[keyword_id] >= 4):
+            evaluate_matrix["4_syllable"].append([sum_precision/N, Precision[N-1], Precision[9]])
         else:
-            evaluate_matrix["unigram keyword"].append([sum_precision/N, Precision[N-1], Precision[TOP-1]])
+            print("keyword: %s not find in the syllable num dictionary or syllable num wrong: %d \n"%(keyword_id, syllable_num_dict[keyword_id])) 
+        if (syllable_num_dict[keyword_id] >= 2):
+            evaluate_matrix["2-_syllable"].append([sum_precision/N, Precision[N-1], Precision[9]])
 
-        evaluate_matrix["all keyword"].append([sum_precision/N, Precision[N-1], Precision[TOP-1]])
+        evaluate_matrix["all"].append([sum_precision/N, Precision[N-1], Precision[9]])
         
         #print(str(APset[-1]) + "\t" + str(PatNset[-1]) + "\t" + str(Pat10set[-1]))
     return evaluate_matrix
@@ -104,7 +113,7 @@ if __name__=="__main__":
     occurance_dict = build_occurance_dict(keyword_list, sys.argv[4])
     syllable_num_dict =build_syllable_num_dict(sys.argv[5])
 
-    cost_list = []
+    costlist = []
     for keyword in keyword_list:
         result_fid = open(result_dir + keyword.strip() + ".RESULT")
         result_list = result_fid.readlines()
@@ -115,11 +124,11 @@ if __name__=="__main__":
             score = float(res.strip().split()[0])
             score_list.append(score)
         cost_list.append(score_list)
-    evaluate_matrix = evaluate(cost_list, keyword_list, test_list, occurance_dict, syllable_num_dict)
+    evaluate_matrix = evaluate(cost_list, keyword_list, test_list, relevant_dict, syllable_num_dict)
     for x in matrix_list:
         output = np.array(evaluate_matrix[x]).mean(axis=0)
         MAP = output[0]
         PatN = output[1]
-        Pat5 = output[2]
-        print('%s: MAP=%.3f PatN=%.3f Pat5=%.3f'%(x, MAP, PatN, Pat5))
+        Pat10 = output[2]
+        print('%s: MAP=%.3f PatN=%.3f Pat10=%.3f'%(x, MAP, PatN, Pat10))
 
