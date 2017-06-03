@@ -18,11 +18,11 @@ jb_num=$7
 tmp_list_dir=`mktemp -d temp.XXXX`
 mkdir -p ${log_dir}
 
-python split.py $listfile $tmp_list_dir/ $jb_num 
+python script/split.py $listfile $tmp_list_dir/ $jb_num 
 
 list_file_base_name=`basename $listfile`
 
-./run.pl JOB=1:$jb_num $log_dir/convert_amr2wav.JOB.log \
-  ./amr2wav.sh $source_dir $target_dir ${tmp_list_dir}/${list_file_base_name}JOB $source_type $target_type
+script/run.pl JOB=1:$jb_num $log_dir/convert_amr2wav.JOB.log \
+    script/amr2wav.sh $source_dir $target_dir ${tmp_list_dir}/${list_file_base_name}JOB $source_type $target_type
 
 rm -r $tmp_list_dir
