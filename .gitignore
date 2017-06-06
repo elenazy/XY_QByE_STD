@@ -9,7 +9,7 @@
 # For python and bash script
 !*.py
 !*.sh
-
+!*.pl
 # Some generic scripts
 !/script
 !/myscript
