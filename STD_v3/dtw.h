@@ -36,7 +36,9 @@ float DTWWithPath(const infra::matrix &dist, infra::matrix &path);
 
 float SLN_DTW(const infra::matrix &dist, infra::vector& area); 
 
-void Average(const infra::matrix &mat_a, const infra::matrix &mat_b, int i, int j, int num, infra::matrix &avg_mat);
+void Average_basis(const infra::matrix &mat_a, const infra::matrix &mat_b, int i, int j, int num, infra::matrix &avg_mat);
+
+int Average(const infra::matrix &mat_a, const infra::matrix &mat_b, const infra::matrix path, infra::matrix &avg_mat);
 
 int AverageTemplate(const infra::matrix &mat_a, const infra::matrix &mat_b, const std::string distance_type, infra::matrix &avg_mat);
 

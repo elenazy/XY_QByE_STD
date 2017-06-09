@@ -93,7 +93,7 @@ float DTWWithPath(const infra::matrix &dist, infra::matrix &path) {
     return cost(height, width)/length(height, width);
 }
 
-float SLN_DTW(const infra::matrix &dist, infra::vector& area) {
+float SLN_DTW(const infra::matrix &dist, infra::vector &area) {
     unsigned long height = dist.height();
     unsigned long width = dist.width();
     infra::matrix avg_cost(height, width);
@@ -166,7 +166,7 @@ float SLN_DTW(const infra::matrix &dist, infra::vector& area) {
     return min_cost;
 }
 
-void Average(const infra::matrix &mat_a, const infra::matrix &mat_b, int i, int j, int num, infra::matrix &avg_mat) {
+void Average_basis(const infra::matrix &mat_a, const infra::matrix &mat_b, int i, int j, int num, infra::matrix &avg_mat) {
     unsigned long dim = mat_a.width(); 
     infra::vector vec_a(dim);
     vec_a.zeros();
@@ -185,6 +185,35 @@ void Average(const infra::matrix &mat_a, const infra::matrix &mat_b, int i, int 
     }
 }
 
+int Average(const infra::matrix &mat_a, const infra::matrix &mat_b, const infra::matrix path, infra::matrix &avg_mat) { 
+    int i = mat_a.height();
+    int j = mat_b.height();
+
+    while(i > 0) {
+        if (path(i,j) < 0.5) {
+            std::cout << "ERROR: no such path " << std::endl;
+        } else if (path(i, j) < 1.5 && path(i, j) > 0.5) {
+            Average_basis(mat_a, mat_b, i, j, 1, avg_mat);
+            i--;
+        } else if (path(i, j) < 2.5 && path(i, j) > 1.5) {
+            Average_basis(mat_a, mat_b, i, j, 1, avg_mat);
+            i--;
+            j--;
+        } else if (path(i, j) < 3.5 && path(i, j) > 2.5) {
+            int k = j;
+            while (path(i, j) < 3.5 && path(i, j) > 2.5) {
+                j--;
+            }
+            Average_basis(mat_a, mat_b, i, k, k-j, avg_mat);
+            i--;
+            j--;
+        } else {
+            std::cout << "ERROR: no such path " << std::endl;
+        }
+    }
+    return i;
+}
+
 int AverageTemplate(const infra::matrix &mat_a, const infra::matrix &mat_b, std::string distance_type, infra::matrix &avg_mat) {
     unsigned long height = mat_a.height();
     unsigned long width = mat_b.height();
@@ -194,32 +223,7 @@ int AverageTemplate(const infra::matrix &mat_a, const infra::matrix &mat_b, std:
     ComputeDist(mat_a, mat_b, dist, distance_type);
     DTWWithPath(dist, path);
     avg_mat.resize(height, mat_a.width());
-    int i = mat_a.height();
-    int j = mat_b.height();
-
-    while(i > 0) {
-        if (path(i,j) < 0.5) {
-            std::cout << "ERROR: no such path " << std::endl;
-        } else if (path(i, j) < 1.5 && path(i, j) > 0.5) {
-            Average(mat_a, mat_b, i, j, 1, avg_mat);
-            i--;
-        } else if (path(i, j) < 2.5 && path(i, j) > 1.5) {
-            Average(mat_a, mat_b, i, j, 1, avg_mat);
-            i--;
-            j--;
-        } else if (path(i, j) < 3.5 && path(i, j) > 2.5) {
-            int k = j;
-            while (path(i, j) < 3.5 && path(i, j) > 2.5) {
-                j--;
-            }
-            Average(mat_a, mat_b, i, k, k-j, avg_mat);
-            i--;
-            j--;
-        } else {
-            std::cout << "ERROR: no such path " << std::endl;
-        }
-    }
-    return height;
+    Average(mat_a, mat_b, path, avg_mat);
 }
 
 } //namespace aslp_std

@@ -40,17 +40,36 @@ void TemplateAverageForInstances(const std::vector<infra::matrix> instances, inf
         feature_avg.resize(height, dim);
         feature_avg = instances[0];
         return;
+    } else if (num == 2) {
+        aslp_std::AverageTemplate(instances[0], instances[1], "cosine", feature_avg);
     } else {
         std::vector<infra::matrix> new_instances;
-        if ( num%2 == 1) {
-            new_instances.push_back(instances[num-1]);
+        std::pair < int, int > min_pair(-1, -1);
+        infra::matrix dist(1, 1);
+        infra::matrix best_path(1, 1);
+        infra::matrix path(1, 1); 
+        float min_cost=MISPAR_GADOL_MEOD;
+        float cost=0;
+        for (int i=0; i < num; i++) {
+            for (int j=i+1; j < num; j++) {
+                aslp_std::ComputeDist(instances[i], instances[j], dist, "cosine");
+                cost = aslp_std::DTWWithPath(dist, path);
+                if (cost < min_cost) {
+                    min_cost = cost;
+                    best_path.resize(path.height(), path.width());
+                    best_path = path;
+                    min_pair = std::make_pair(i, j);
+                }
+            }
         }
-        for (int i=0; i < num-1; i+=2) {
-            infra::matrix avg(1, 1);
-            aslp_std::AverageTemplate(instances[i], instances[i+1], "cosine", avg);
-            new_instances.push_back(avg);
+        infra::matrix avg(1, 1);
+        aslp_std::Average(instances[min_pair.first], instances[min_pair.second], best_path, avg);
+        new_instances.push_back(avg);
+        for (int i=0; i < num; i++) {
+            if (i != min_pair.first && i != min_pair.second) {
+                new_instances.push_back(instances[i]);
+            }
         }
-        TemplateAverageForInstances(new_instances, feature_avg);
     }
     return;
 }
