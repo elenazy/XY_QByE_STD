@@ -40,10 +40,10 @@ if __name__=="__main__":
         result_all[data_type]=Result(data_type, 10)
 
     for line in open(sys.argv[1]).readlines():
-        if line.find("/mnt/jyhou/feats/XiaoYing_STD") >= 0:
+        if line.find("/home/disk1/jyhou/feats/XiaoYing_STD") >= 0:
             fields = line.strip().split("/")
-            keyword_field = fields[5]
-            data_field = fields[6]
+            keyword_field = fields[6]
+            data_field = fields[7]
             
             fields = keyword_field.split("_")
             template_num = fields[4]

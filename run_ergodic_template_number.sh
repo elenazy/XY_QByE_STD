@@ -1,16 +1,16 @@
 #!/usr/bin/bash
-stage=2
+stage=1
 core_num=20
-    
-keyword_list_dir="/mnt/jyhou/feats/XiaoYing_STD/list/"
-data_list_dir="/mnt/jyhou/feats/XiaoYing_STD/list/"
+feat_dir="/home/disk1/jyhou/feats/XiaoYing_STD" 
+keyword_list_dir="/home/disk1/jyhou/feats/XiaoYing_STD/list/"
+data_list_dir="/home/disk1/jyhou/feats/XiaoYing_STD/list/"
 
-text_file="/mnt/jyhou/workspace/my_code/Prepare_windows_data/xiaoying_native/text_fixed_tail_500"
+text_file="/home/disk1/jyhou/my_egs/swbd_xy_egs/info/text_fixed_tail_500"
 syllable_num_file="data/keyword_syllable_num.txt" 
 
-fea_type="sbnf6"
+fea_type="sbnf1"
 
-if [ $fea_type = "sbnf6" ]; then
+if [ $fea_type = "sbnf1" ]; then
     distance_type="cosine"
     do_mvn=1;
 fi
@@ -21,7 +21,7 @@ do
     do
         for random_num in `seq 5`;
         do
-            keyword_dir="/mnt/jyhou/feats/XiaoYing_STD/a_${keyword_type}_${tempalte_num}_${random_num}/"
+            keyword_dir="$feat_dir/a_${keyword_type}_${tempalte_num}_${random_num}/"
             keyword_list_basename="${keyword_type}_${tempalte_num}_${random_num}_average.list"
             keyword_list_file=${keyword_list_dir}${keyword_list_basename}
             
@@ -36,7 +36,7 @@ do
                 
                 for x in data_15_30 data_40_55 data_65_80;
                 do
-                    test_dir="/mnt/jyhou/feats/XiaoYing_STD/$x/"
+                    test_dir="$feat_dir/$x/"
                     test_list_file="${data_list_dir}/${x}.list"
                     result_dir=${keyword_dir}dtw_${x}_${fea_type}/;
                     mkdir -p $result_dir

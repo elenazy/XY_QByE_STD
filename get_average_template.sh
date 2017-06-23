@@ -1,11 +1,12 @@
 #!/usr/bin/bash
 stage=1
-fea_type="sbnf6"
-if [ $fea_type = "sbnf6" ]; then
+fea_type="sbnf1"
+if [ $fea_type = "sbnf1" ]; then
     distance_type="cosine"
     do_mvn=1;
 fi
 
+feat_dir=/home/disk1/jyhou/feats/XiaoYing_STD
 #for x in keywords_native_95_100; #keywords_95_100 keywords_75_80 keywords_55_60 keywords_native; # keywords_native_95_100
 #for x in keywords_20_60 keywords_60_100 keywords_native; # keywords_native_95_100
 for x in keywords_60_100; # keywords_native_95_100
@@ -14,9 +15,9 @@ do
     do
         for random_num in `seq 5`;
         do
-            keyword_dir="/mnt/jyhou/feats/XiaoYing_STD/$x/"
-            average_dir="/mnt/jyhou/feats/XiaoYing_STD/a_${x}_${tempalte_num}_${random_num}/"
-            keyword_list_dir="/mnt/jyhou/feats/XiaoYing_STD/list/"
+            keyword_dir="$feat_dir/$x/"
+            average_dir="$feat_dir/a_${x}_${tempalte_num}_${random_num}/"
+            keyword_list_dir="${feat_dir}/list/"
             keyword_list_basename="${x}_${tempalte_num}_${random_num}.list"
             average_list_basename="${x}_${tempalte_num}_${random_num}_average.list"
             keyword_list_file="${keyword_list_dir}${keyword_list_basename}"
