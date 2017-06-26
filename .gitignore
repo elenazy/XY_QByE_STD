@@ -10,6 +10,7 @@
 !*.py
 !*.sh
 !*.pl
+!*.txt
 # Some generic scripts
 !/script
 !/myscript

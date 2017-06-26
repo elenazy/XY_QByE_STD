@@ -8,9 +8,9 @@ data_list_dir="/home/disk1/jyhou/feats/XiaoYing_STD/list/"
 text_file="/home/disk1/jyhou/my_egs/swbd_xy_egs/info/text_fixed_tail_500"
 syllable_num_file="data/keyword_syllable_num.txt" 
 
-fea_type="sbnf1"
+fea_type="sbnf2"
 
-if [ $fea_type = "sbnf1" ]; then
+if [ $fea_type = "sbnf2" ]; then
     distance_type="cosine"
     do_mvn=1;
 fi

@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 stage=1
-fea_type="sbnf1"
-if [ $fea_type = "sbnf1" ]; then
+fea_type="sbnf2"
+if [ $fea_type = "sbnf2" ]; then
     distance_type="cosine"
     do_mvn=1;
 fi
