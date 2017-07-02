@@ -21,7 +21,7 @@ do
     do
         for random_num in `seq 5`;
         do
-            keyword_dir="$feat_dir/a_${keyword_type}_${tempalte_num}_${random_num}/"
+            keyword_dir="$feat_dir/ah2_${keyword_type}_${tempalte_num}_${random_num}/"
             keyword_list_basename="${keyword_type}_${tempalte_num}_${random_num}_average.list"
             keyword_list_file=${keyword_list_dir}${keyword_list_basename}
             

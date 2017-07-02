@@ -1,6 +1,6 @@
 
 # headers:
-ver    =debug
+ver    = #debug
 
 HDRS    = infra.h \
 	htkfile.h \
@@ -33,7 +33,7 @@ OBJS = $(SRCS:.cc=.o)
 
 #==========================================================#
 
-all: dtw_std template_avg template_avg_hierarchical
+all: dtw_std template_avg template_avg_hierarchical template_avg_alitolong
 
 dtw_std: dtw_std.o $(OBJS) 
 	$(CC) dtw_std.o $(OBJS) $(LFLAGS) -o dtw_std
@@ -44,9 +44,12 @@ template_avg: template_avg.o $(OBJS)
 template_avg_hierarchical: template_avg_hierarchical.o $(OBJS)
 	$(CC) template_avg_hierarchical.o $(OBJS) $(LFLAGS) -o template_avg_hierarchical
 
+template_avg_alitolong: template_avg_alitolong.o $(OBJS)
+	$(CC) template_avg_alitolong.o $(OBJS) $(LFLAGS) -o template_avg_alitolong
+
 %.o: %.cc $(HDRS)
 	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -f *.o dtw_std template_avg template_avg_hierarchical
+	rm -f *.o dtw_std template_avg template_avg_hierarchical template_avg_alitolong
 

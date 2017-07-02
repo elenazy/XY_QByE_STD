@@ -34,44 +34,46 @@ using namespace std;
 
 void TemplateAverageForInstances(const std::vector<infra::matrix> instances, infra::matrix &feature_avg) {
     int num = instances.size();
+    int half = num/2;
+    int i, j;
+    int length;
+    int max_length = 0, max_index;
+    vector< std::vector <  std::vector<int> > > maps;
+    std::vector <  std::vector<int> > *p;
+    for (i = 0; i < num ; i++) {
+        p = new std::vector <  std::vector<int> >;
+        maps.push_back(*p);
+    }
+
     if (num == 1) {
         int height = instances[0].height();
         int dim = instances[0].width();
         feature_avg.resize(height, dim);
         feature_avg = instances[0];
-        return;
-    } else if (num == 2) {
-        aslp_std::AverageTemplate(instances[0], instances[1], "cosine", feature_avg);
     } else {
-        std::vector<infra::matrix> new_instances;
-        std::pair < int, int > min_pair(-1, -1);
+        for (i = 0; i < num; i++) {
+            length = instances[i].height();
+            if (max_length < length) {
+                max_length = length;
+                max_index = i;
+            }
+        }
         infra::matrix dist(1, 1);
-        infra::matrix best_path(1, 1);
-        infra::matrix path(1, 1); 
-        float min_cost=-10000;
-        float cost=0;
-        for (int i=0; i < num; i++) {
-            for (int j=i+1; j < num; j++) {
-                aslp_std::ComputeDist(instances[i], instances[j], dist, "cosine");
-                cost = aslp_std::DTWWithPath(dist, path);
-                if (cost > min_cost) {
-                    min_cost = cost;
-                    best_path.resize(path.height(), path.width());
-                    best_path = path;
-                    min_pair = std::make_pair(i, j);
+        infra::matrix path(1, 1);
+        for (i = 0; i < num; i++) { 
+            if ( i != max_index) {
+                aslp_std::ComputeDist(instances[max_index], instances[i], dist, "cosine"); 
+                aslp_std::DTWWithPath(dist, path);
+                aslp_std::ConvertPath2Map(path, maps[i]);
+            } else {
+                path.resize(max_length + 1, max_length + 1);
+                for (j = 0; j < max_length+1; j++) {
+                    path(j, j) = 2;
                 }
+                aslp_std::ConvertPath2Map(path, maps[i]);
             }
         }
-        infra::matrix avg(1, 1);
-        
-        aslp_std::Average(instances[min_pair.first], instances[min_pair.second], best_path, avg);
-        new_instances.push_back(avg);
-        for (int i=0; i < num; i++) {
-            if (i != min_pair.first && i != min_pair.second) {
-                new_instances.push_back(instances[i]);
-            }
-        }
-        TemplateAverageForInstances(new_instances, feature_avg);
+        aslp_std::Average4Maps(instances, maps, feature_avg);
     }
     return;
 }

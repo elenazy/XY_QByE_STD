@@ -185,10 +185,11 @@ void Average_basis(const infra::matrix &mat_a, const infra::matrix &mat_b, int i
     }
 }
 
+
 int Average(const infra::matrix &mat_a, const infra::matrix &mat_b, const infra::matrix path, infra::matrix &avg_mat) { 
     int i = mat_a.height();
     int j = mat_b.height();
-
+    avg_mat.resize(i, mat_a.width());
     while(i > 0) {
         if (path(i,j) < 0.5) {
             std::cout << "ERROR: no such path " << std::endl;
@@ -226,4 +227,52 @@ int AverageTemplate(const infra::matrix &mat_a, const infra::matrix &mat_b, std:
     Average(mat_a, mat_b, path, avg_mat);
 }
 
+void Average4Maps(const std::vector<infra::matrix> &instances, const std::vector< std::vector <  std::vector<int> > > &maps, infra::matrix &avg_mat) {
+    int i, j, k;
+    int length = maps[0].size();
+    int dim = instances[0].width();
+    avg_mat.resize(length, dim);
+    avg_mat.zeros();
+    for (i = 0; i < length; i++) {
+        for (j = 0; j < instances.size(); j++) {
+            for (k = 0; k < maps[j][i].size(); k++) {
+                avg_mat.row(i) += instances[j].row(maps[j][i][k]);
+            }
+        }
+    }
+}
+
+void ConvertPath2Map(const infra::matrix &path, std::vector< std::vector<int> > &map
+) {
+    int i = path.height()-1;
+    int j = path.width()-1;
+    std::vector<int> *p = new std::vector<int>;
+    for (int k = 0; k < i; k ++) {
+        p = new std::vector<int>;
+        map.push_back(*p);
+    }
+    while( i > 0) {
+        if (path(i,j) < 0.5) {
+            std::cout << "ERROR: no such path " << std::endl;
+        } else if (path(i, j) < 1.5 && path(i, j) > 0.5) {
+            map[i-1].push_back(j-1);
+            i--;
+        } else if (path(i, j) < 2.5 && path(i, j) > 1.5) {
+            map[i-1].push_back(j-1);
+            i--;
+            j--;
+        } else if (path(i, j) < 3.5 && path(i, j) > 2.5) {
+            int k = j;
+            while (path(i, j) < 3.5 && path(i, j) > 2.5) {
+                map[i-1].push_back(j-1);
+                j--;
+            }
+            map[i-1].push_back(j-1);
+            i--;
+            j--;
+        } else {
+            std::cout << "ERROR: no such path " << std::endl;
+        }
+    }
+}
 } //namespace aslp_std

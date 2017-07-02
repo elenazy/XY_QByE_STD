@@ -12,7 +12,7 @@ def ROC(finalScore, trueNum):
     Nactual = trueNum
     Nmiss = Nactual
     Nfa = 0
-    sortedFinalScore=sorted(finalScore, key=lambda t:t[0], reverse = False)
+    sortedFinalScore=sorted(finalScore, key=lambda t:t[0], reverse = True)
     fid=open("sorted_score.txt","w")
     for i in range(len(sortedFinalScore)):
         fid.writelines(str(sortedFinalScore[i]))
@@ -48,7 +48,7 @@ if __name__=="__main__":
         for j in range(len(test_list)):
             res = result_list[j]
             score = float(res.strip().split()[0])
-            cost_list.append(score)
+            cost_list.append(1 - score)
             
             keyword_id = keyword.strip().split("_")[0]
             doc_id = "_".join(test_list[j].strip().split("_")[:-1])
@@ -57,7 +57,7 @@ if __name__=="__main__":
                 real_num += 1
             else:
                 real.append(False)
-        #norm_cost_list = evaluate.m_norm(cost_list)
+        norm_cost_list = evaluate.m_norm(cost_list)
         norm_cost_list = cost_list
         for j in range(len(test_list)):
             cost_list_all.append((norm_cost_list[j], real[j]))

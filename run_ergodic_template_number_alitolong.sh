@@ -17,11 +17,11 @@ fi
 #for x in keywords_20_60 keywords_60_100 keywords_native keywords_native-keywords_60_100;
 for keyword_type in keywords_60_100
 do
-    for tempalte_num in `seq 3 10`;
+    for tempalte_num in `seq 2 10`;
     do
         for random_num in `seq 5`;
         do
-            keyword_dir="$feat_dir/a_${keyword_type}_${tempalte_num}_${random_num}/"
+            keyword_dir="$feat_dir/al_${keyword_type}_${tempalte_num}_${random_num}/"
             keyword_list_basename="${keyword_type}_${tempalte_num}_${random_num}_average.list"
             keyword_list_file=${keyword_list_dir}${keyword_list_basename}
             

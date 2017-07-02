@@ -136,6 +136,9 @@ void EuclideanDistance(const infra::matrix& query, const infra::matrix& test, in
 }
 
 void ComputeDist( const infra::matrix& query, const infra::matrix& test, infra::matrix& dist_matrix, std::string distance_type) {
+    int height = query.height();
+    int width = test.height();
+    dist_matrix.resize(height, width);
     if (distance_type.find("KL-divergence") != std::string::npos) {
         KLDivergenceDistance(query, test, dist_matrix);
     } else if (distance_type.find("cos") != std::string::npos) {

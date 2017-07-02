@@ -34,23 +34,30 @@ using namespace std;
 
 void TemplateAverageForInstances(const std::vector<infra::matrix> instances, infra::matrix &feature_avg) {
     int num = instances.size();
+    int half = num/2;
+    int i = 0;
     if (num == 1) {
         int height = instances[0].height();
         int dim = instances[0].width();
         feature_avg.resize(height, dim);
         feature_avg = instances[0];
-        return;
+    } else if (num == 2) {
+        aslp_std::AverageTemplate(instances[0], instances[1], "cosine", feature_avg);
     } else {
-        std::vector<infra::matrix> new_instances;
-        if ( num%2 == 1) {
-            new_instances.push_back(instances[num-1]);
+        infra::matrix avg_1(1, 1);
+        infra::matrix avg_2(1, 1);
+        std::vector<infra::matrix> subinstances_1;
+        std::vector<infra::matrix> subinstances_2;
+        for(i = 0; i < half; i++) {
+            subinstances_1.push_back(instances[i]);
         }
-        for (int i=0; i < num-1; i+=2) {
-            infra::matrix avg(1, 1);
-            aslp_std::AverageTemplate(instances[i], instances[i+1], "cosine", avg);
-            new_instances.push_back(avg);
+        for(i = half; i < num; i++) { 
+            subinstances_2.push_back(instances[i]);
         }
-        TemplateAverageForInstances(new_instances, feature_avg);
+
+        TemplateAverageForInstances(subinstances_1, avg_1);
+        TemplateAverageForInstances(subinstances_2, avg_2);
+        aslp_std::AverageTemplate(avg_1, avg_2, "cosine", feature_avg);
     }
     return;
 }

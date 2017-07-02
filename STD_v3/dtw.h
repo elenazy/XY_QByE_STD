@@ -19,6 +19,7 @@
 
 #include <math.h>
 #include <string>
+#include <vector>
 
 #include "infra.h"
 
@@ -42,6 +43,10 @@ int Average(const infra::matrix &mat_a, const infra::matrix &mat_b, const infra:
 
 int AverageTemplate(const infra::matrix &mat_a, const infra::matrix &mat_b, const std::string distance_type, infra::matrix &avg_mat);
 
+void Average4Maps(const std::vector<infra::matrix> &instances, const std::vector< std::vector < std::vector<int> > > &maps, infra::matrix &avg_mat);
+
+void ConvertPath2Map(const infra::matrix &path, std::vector< std::vector<int> > &map);
+        std::vector<int> *p = new std::vector<int>;
 } //namespace aslp_std
 
 #endif // ASLP_KWS_DTW_H_

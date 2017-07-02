@@ -23,6 +23,12 @@ class Result():
         self.__pat5_results[template_id].append(Pat5)
 
     def get_summery_out(self):
+        for i in range(10):
+            if self.__map_results[i] == []:
+                for j in range(5):
+                    self.__map_results[i].append(0);
+                    self.__patn_results[i].append(0);
+                    self.__pat5_results[i].append(0);
         print(str(self.__map_results))
         map_all = [np.mean(self.__map_results, 1), np.max(self.__map_results, 1), np.min(self.__map_results, 1)]
         patn_all = [np.mean(self.__patn_results, 1), np.max(self.__patn_results, 1), np.min(self.__patn_results, 1)]
