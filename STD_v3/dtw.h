@@ -39,14 +39,13 @@ float SLN_DTW(const infra::matrix &dist, infra::vector& area);
 
 void Average_basis(const infra::matrix &mat_a, const infra::matrix &mat_b, int i, int j, int num, infra::matrix &avg_mat);
 
-int Average(const infra::matrix &mat_a, const infra::matrix &mat_b, const infra::matrix path, infra::matrix &avg_mat);
+int Average(const infra::matrix &mat_a, const infra::matrix &mat_b, const infra::matrix &path, infra::matrix &avg_mat);
 
 int AverageTemplate(const infra::matrix &mat_a, const infra::matrix &mat_b, const std::string distance_type, infra::matrix &avg_mat);
 
 void Average4Maps(const std::vector<infra::matrix> &instances, const std::vector< std::vector < std::vector<int> > > &maps, infra::matrix &avg_mat);
 
 void ConvertPath2Map(const infra::matrix &path, std::vector< std::vector<int> > &map);
-        std::vector<int> *p = new std::vector<int>;
 } //namespace aslp_std
 
 #endif // ASLP_KWS_DTW_H_

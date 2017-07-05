@@ -16,7 +16,7 @@ do
         for random_num in `seq 5`;
         do
             keyword_dir="$feat_dir/$x/"
-            average_dir="$feat_dir/al_${x}_${tempalte_num}_${random_num}/"
+            average_dir="$feat_dir/af_${x}_${tempalte_num}_${random_num}/"
             keyword_list_dir="${feat_dir}/list/"
             keyword_list_basename="${x}_${tempalte_num}_${random_num}.list"
             average_list_basename="${x}_${tempalte_num}_${random_num}_average.list"
@@ -29,11 +29,10 @@ do
             fi
             
             if [ $stage -le 1 ]; then
-                echo "./STD_v3/template_avg_alitolong $keyword_dir ${keyword_list_file} $fea_type $distance_type $do_mvn $average_dir"
-                      #./STD_v3/template_avg_alitolong $keyword_dir ${keyword_list_file} $fea_type $distance_type $do_mvn $average_dir
+                echo "./STD_v3/template_avg_forget $keyword_dir ${keyword_list_file} $fea_type $distance_type $do_mvn $average_dir"
+                      ./STD_v3/template_avg_forget $keyword_dir ${keyword_list_file} $fea_type $distance_type $do_mvn $average_dir
             fi
             find $average_dir -name *.$fea_type | sed -e "s:^${average_dir}::" -e "s:.${fea_type}$::" | sort > "${keyword_list_dir}${average_list_basename}"
-        
         done
     done
 done

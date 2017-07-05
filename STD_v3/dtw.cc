@@ -186,13 +186,13 @@ void Average_basis(const infra::matrix &mat_a, const infra::matrix &mat_b, int i
 }
 
 
-int Average(const infra::matrix &mat_a, const infra::matrix &mat_b, const infra::matrix path, infra::matrix &avg_mat) { 
+int Average(const infra::matrix &mat_a, const infra::matrix &mat_b, const infra::matrix &path, infra::matrix &avg_mat) { 
     int i = mat_a.height();
     int j = mat_b.height();
     avg_mat.resize(i, mat_a.width());
     while(i > 0) {
         if (path(i,j) < 0.5) {
-            std::cout << "ERROR: no such path " << std::endl;
+            std::cout << "ERROR: no such path 1 " << std::endl;
         } else if (path(i, j) < 1.5 && path(i, j) > 0.5) {
             Average_basis(mat_a, mat_b, i, j, 1, avg_mat);
             i--;
@@ -233,12 +233,16 @@ void Average4Maps(const std::vector<infra::matrix> &instances, const std::vector
     int dim = instances[0].width();
     avg_mat.resize(length, dim);
     avg_mat.zeros();
+    float count =0;
     for (i = 0; i < length; i++) {
+        count =0;
         for (j = 0; j < instances.size(); j++) {
             for (k = 0; k < maps[j][i].size(); k++) {
                 avg_mat.row(i) += instances[j].row(maps[j][i][k]);
+                count += 1;
             }
         }
+        avg_mat.row(i) /= count;
     }
 }
 
