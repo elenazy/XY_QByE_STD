@@ -17,7 +17,7 @@ fi
 #for x in keywords_20_60 keywords_60_100 keywords_native keywords_native-keywords_60_100;
 for keyword_type in keywords_60_100
 do
-    for tempalte_num in `seq 3 10`;
+    for tempalte_num in `seq 1 10`;
     do
         for random_num in `seq 5`;
         do
@@ -38,12 +38,12 @@ do
                 do
                     test_dir="$feat_dir/$x/"
                     test_list_file="${data_list_dir}/${x}.list"
-                    result_dir=${keyword_dir}dtw_${x}_${fea_type}/;
+                    result_dir=${keyword_dir}i_dtw_${x}_${fea_type}/;
                     mkdir -p $result_dir
                     for i in `seq $core_num`; do
                     {
-                        #echo "./STD_v3/dtw_std $keyword_dir ./tmp/${keyword_list_basename}${i} $test_dir $test_list_file $fea_type $distance_type $do_mvn $result_dir"
-                              ./STD_v3/dtw_std $keyword_dir ./tmp/${keyword_list_basename}${i} $test_dir $test_list_file $fea_type $distance_type $do_mvn $result_dir
+                        #echo "./STD_v3/i_dtw_std $keyword_dir ./tmp/${keyword_list_basename}${i} $test_dir $test_list_file $fea_type $distance_type $do_mvn $result_dir"
+                              ./STD_v3/i_dtw_std $keyword_dir ./tmp/${keyword_list_basename}${i} $test_dir $test_list_file $fea_type $distance_type $do_mvn $result_dir
                     } &
                     done
                     wait
@@ -54,7 +54,7 @@ do
             if [ $stage -le 2 ]; then
                 for x in data_15_30 data_40_55 data_65_80;
                 do
-                   result_dir=${keyword_dir}dtw_${x}_${fea_type}/
+                   result_dir=${keyword_dir}i_dtw_${x}_${fea_type}/
                    test_list_file="${data_list_dir}/${x}.list"
                    echo $result_dir
                    python ./script/evaluate.py $result_dir $keyword_list_file $test_list_file $text_file $syllable_num_file

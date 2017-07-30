@@ -29,13 +29,23 @@
 namespace aslp_std {
 
 #define LEN_PENALTY_DIAG 2
-#define BIG_FLT 99999999
-
+#define BIG_FLT 9999999
+#define MAX_ITERATION 10
 float DTW(const infra::matrix &dist);
 
 float DTWWithPath(const infra::matrix &dist, infra::matrix &path);
 
-float SLN_DTW(const infra::matrix &dist, infra::vector& area); 
+float SLN_DTW_c1(const infra::matrix &dist, infra::vector &area); 
+
+float SLN_DTW_c1_v2(const infra::matrix &dist, infra::vector &area);
+
+float SLN_DTW_c2(const infra::matrix &dist, infra::vector &area);
+
+float subsequence_DTW_c1(const infra::matrix &dist, infra::vector &area);
+
+float subsequence_DTW_c2(const infra::matrix &dist, infra::vector &area);
+
+float I_DTW(float epsilon, const infra::matrix &dist, infra::vector &area);
 
 void Average_basis(const infra::matrix &mat_a, const infra::matrix &mat_b, int i, int j, int num, infra::matrix &avg_mat);
 

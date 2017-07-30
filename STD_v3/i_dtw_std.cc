@@ -43,7 +43,7 @@ int score_for_one_query(aslp_std::Feature &query, aslp_std::Feature* tests, int 
         infra::matrix dist(height, width);
         infra::vector area(2);    
         aslp_std::ComputeDist(query_feature, test_feature, dist, distance_type);
-        float score = aslp_std::SLN_DTW_c2(dist, area);
+        float score = aslp_std::I_DTW(0, dist, area);
         ofs << score << " " << area(0) << " " << area(1) << endl;
     }
     ofs.close();
