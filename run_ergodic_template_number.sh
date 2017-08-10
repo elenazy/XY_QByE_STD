@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-stage=1
+stage=2
 core_num=20
 feat_dir="/home/disk1/jyhou/feats/XiaoYing_STD" 
 keyword_list_dir="/home/disk1/jyhou/feats/XiaoYing_STD/list/"
@@ -38,12 +38,12 @@ do
                 do
                     test_dir="$feat_dir/$x/"
                     test_list_file="${data_list_dir}/${x}.list"
-                    result_dir=${keyword_dir}i_dtw_${x}_${fea_type}/;
+                    result_dir=${keyword_dir}sln_dtw_${x}_${fea_type}/;
                     mkdir -p $result_dir
                     for i in `seq $core_num`; do
                     {
                         #echo "./STD_v3/i_dtw_std $keyword_dir ./tmp/${keyword_list_basename}${i} $test_dir $test_list_file $fea_type $distance_type $do_mvn $result_dir"
-                              ./STD_v3/i_dtw_std $keyword_dir ./tmp/${keyword_list_basename}${i} $test_dir $test_list_file $fea_type $distance_type $do_mvn $result_dir
+                              ./STD_v3/dtw_std $keyword_dir ./tmp/${keyword_list_basename}${i} $test_dir $test_list_file $fea_type $distance_type $do_mvn $result_dir
                     } &
                     done
                     wait
@@ -54,7 +54,7 @@ do
             if [ $stage -le 2 ]; then
                 for x in data_15_30 data_40_55 data_65_80;
                 do
-                   result_dir=${keyword_dir}i_dtw_${x}_${fea_type}/
+                   result_dir=${keyword_dir}sln_dtw_${x}_${fea_type}/
                    test_list_file="${data_list_dir}/${x}.list"
                    echo $result_dir
                    python ./script/evaluate.py $result_dir $keyword_list_file $test_list_file $text_file $syllable_num_file

@@ -29,7 +29,8 @@ using namespace std;
 //output: test //the out put matrix
 int score_for_one_query(aslp_std::Feature &query, aslp_std::Feature* tests, int test_size, 
                         string distance_type, string result_dir) {
-    //normal DTW   
+    //normal DTW  
+     
     std::string query_id = query.GetFeatureId();
     infra::matrix query_feature = query.GetFeature();
     ofstream ofs((result_dir + query_id + ".RESULT").c_str());
@@ -43,6 +44,19 @@ int score_for_one_query(aslp_std::Feature &query, aslp_std::Feature* tests, int 
         infra::matrix dist(height, width);
         infra::vector area(2);    
         aslp_std::ComputeDist(query_feature, test_feature, dist, distance_type);
+        cout << "query id: " << query_id << ", length: " << height << endl;
+        cout << "utterance id: " << tests[i].GetFeatureId() << ", length: " << width <<endl;
+        int p,q;
+        ofstream out;
+        out.open(query_id+"_"+tests[i].GetFeatureId()+"_distance.txt", ios::out);
+
+        for (p = 0; p < height; p++) {
+            for (q = 0; q < width; q++) {
+               out << dist(p,q)  << " ";
+            }
+            out << endl;
+        }
+        out.close();
         float score = aslp_std::I_DTW(0, dist, area);
         ofs << score << " " << area(0) << " " << area(1) << endl;
     }

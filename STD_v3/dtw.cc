@@ -198,10 +198,10 @@ float SLN_DTW_c1_v2(const infra::matrix &dist, infra::vector &area) {
 
     //first row
     for( int j = 0; j < width; j++) {
-        avg_cost(0, i) = dist(0, i);
-        cost(0, i) = dist(0, i);
-        trace(0, i) = i;
-        length(0, i) = 1;
+        avg_cost(0, j) = dist(0, j);
+        cost(0, j) = dist(0, j);
+        trace(0, j) = j;
+        length(0, j) = 1;
     }
 
 
@@ -281,11 +281,11 @@ float SLN_DTW_c2(const infra::matrix &dist, infra::vector &area) {
     }
 
     //first row
-    for (j = 0; j < width; i++) {
-        avg_cost(0, i) = dist(0, i);
-        cost(0, i) = dist(0, i);
-        trace(0, i) = i;
-        length(0, i) = 1;
+    for (j = 0; j < width; j++) {
+        avg_cost(0, j) = dist(0, j);
+        cost(0, j) = dist(0, j);
+        trace(0, j) = j;
+        length(0, j) = 1;
     }
 
     // fill the three matrices in a dynamic programming style.
@@ -487,6 +487,7 @@ float I_DTW(float epsilon, const infra::matrix &dist, infra::vector &area) {
             dist_tmp(height + 1, j) = epsilon;
         }
         epsilon = subsequence_DTW_c2(dist_tmp, area);
+        std::cout << "iteration: " << counter << ", epsilon: " << epsilon << ", start frame: " << area(0) << ", end frame: " << area(1) << std::endl;
         if (epsilon > 1) {
             std::cout << "too short utterances: (" << width  << " vs " 
                       << height << ")" << std::endl;
@@ -499,6 +500,7 @@ float I_DTW(float epsilon, const infra::matrix &dist, infra::vector &area) {
             break;
         }
     }
+    std::cout << std::endl;
     return epsilon;
 }
 

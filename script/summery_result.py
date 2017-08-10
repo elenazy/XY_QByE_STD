@@ -56,7 +56,7 @@ if __name__=="__main__":
             random_num = fields[5]
 
             fields = data_field.split("_")
-            data_type = "_".join(fields[2:4])
+            data_type = "_".join(fields[-3:-1])
         elif line.find("all keyword") >= 0:
             fields = line.strip().split(" ")
             MAP = float(fields[2].strip().split("=")[1])

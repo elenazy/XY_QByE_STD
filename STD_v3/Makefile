@@ -1,6 +1,6 @@
 
 # headers:
-ver    =  release
+ver    =debug
 
 HDRS    = infra.h \
 	htkfile.h \
