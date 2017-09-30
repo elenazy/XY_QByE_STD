@@ -30,6 +30,7 @@
 #include "util.h"
 #define MISPAR_GADOL_MEOD (1000000000);
 
+
 using namespace std;
 
 void TemplateAverageForInstances(const std::vector<infra::matrix> instances, infra::matrix &feature_avg) {
@@ -42,7 +43,7 @@ void TemplateAverageForInstances(const std::vector<infra::matrix> instances, inf
         feature_avg.resize(height, dim);
         feature_avg = instances[0];
     } else if (num == 2) {
-        aslp_std::AverageTemplate(instances[0], instances[1], "cosine", feature_avg);
+        aslp_std::AverageTemplate(instances[0], instances[1], "cos", feature_avg);
     } else {
         infra::matrix avg_1(1, 1);
         infra::matrix avg_2(1, 1);
@@ -57,7 +58,7 @@ void TemplateAverageForInstances(const std::vector<infra::matrix> instances, inf
 
         TemplateAverageForInstances(subinstances_1, avg_1);
         TemplateAverageForInstances(subinstances_2, avg_2);
-        aslp_std::AverageTemplate(avg_1, avg_2, "cosine", feature_avg);
+        aslp_std::AverageTemplate(avg_1, avg_2, "cos", feature_avg);
     }
     return;
 }
@@ -135,11 +136,11 @@ int main(int argc, char *argv[]) {
     if (do_mvn) {
         MVN(querys, query_size);
     }
-
+    
     if (distance_type.find("cos") != std::string::npos ) { 
         NormalizeFeature(querys, query_size);
     }
-    
+
     std::vector<std::string> query_id_splits;
     std::map< std::string, std::vector<int> > uniq_query_map;
     for (int i=0; i < query_size; i++) {

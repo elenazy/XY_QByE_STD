@@ -46,7 +46,7 @@ int score_for_one_query(aslp_std::Feature &query, aslp_std::Feature* tests, int 
         aslp_std::ComputeDist(query_feature, test_feature, dist, distance_type);
         cout << "query id: " << query_id << ", length: " << height << endl;
         cout << "utterance id: " << tests[i].GetFeatureId() << ", length: " << width <<endl;
-        int p,q;
+  /*      int p,q;
         ofstream out;
         out.open(query_id+"_"+tests[i].GetFeatureId()+"_distance.txt", ios::out);
 
@@ -57,6 +57,7 @@ int score_for_one_query(aslp_std::Feature &query, aslp_std::Feature* tests, int 
             out << endl;
         }
         out.close();
+    */    
         float score = aslp_std::I_DTW(0, dist, area);
         ofs << score << " " << area(0) << " " << area(1) << endl;
     }

@@ -110,10 +110,10 @@ int main(int argc, char *argv[]) {
         MVN(querys, query_size);
     }
 
-    if (distance_type.find("cos") != std::string::npos ) { 
+//    if (distance_type.find("cos") != std::string::npos ) { 
         NormalizeFeature(tests, test_size);
         NormalizeFeature(querys, query_size);
-    }
+  //  }
 
     //debug the function of score_for_one_query()
     for (int i = 0; i < query_size; i++){

@@ -29,7 +29,7 @@
 namespace aslp_std {
 
 #define LEN_PENALTY_DIAG 2
-#define BIG_FLT 9999999
+#define BIG_FLT 1e100
 #define MAX_ITERATION 10
 float DTW(const infra::matrix &dist);
 

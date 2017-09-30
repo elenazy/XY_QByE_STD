@@ -48,8 +48,7 @@ void NormalizeFeature(infra::matrix& feature) {
     unsigned long height = feature.height();
     unsigned long width = feature.width();
 
-    for(int i = 0; i < height; i++)
-    {
+    for(int i = 0; i < height; i++) {
         float sum=0;
         for(int j = 0; j < width; j++)
             sum += feature(i, j) * feature(i, j);
