@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <thread>
+#include "util.h"
 #include "infra.h"
 #include "htkfile.h"
 #include "dataset.h"
@@ -82,6 +83,30 @@ void ReadData(aslp_std::Feature* features, string feature_dir, StringVector &fea
         features[i].ReadData(feature_dir, feature_list[i], feature_type); 
     }
 }
+
+void ReadQueryData(aslp_std::Feature *features, int *features_break, string feature_dir, StringVector &feature_list, int feature_list_size, string feature_type) {
+    for (int i=0; i < feature_list_size; i++) {
+        std::vector <std::string> words = aslp_std::Split(feature_list[i], "-");
+        aslp_std::Feature f1;
+        aslp_std::Feature f2;
+        f1.ReadData(feature_dir, words[0], feature_type);
+        f2.ReadData(feature_dir, words[1], feature_type);
+        infra::matrix mat1 = f1.GetFeature();
+        infra::matrix mat2 = f2.GetFeature();
+        int h1 = mat1.height();
+        int h2 = mat2.height();
+        infra::matrix mat(h1+h2, mat1.width());
+        for (int j = 0; j < h1; j++) {
+            mat.row(j) = mat1.row(j);
+        }
+        for (int j = h1; j < h1+h2; j++) {
+            mat.row(j) = mat2.row(j-h1);
+        }
+        features[i].ReadData(feature_dir, feature_list[i], feature_type, mat);
+        features_break[i] = h1;
+    }
+}
+
 int main(int argc, char *argv[]) {    
     if(argc < 9) {
         cerr<<"USAGE: query_dir query_list_file test_dir test_list_file feature_type distance_type doMvn result_dir" << endl;
@@ -117,18 +142,13 @@ int main(int argc, char *argv[]) {
     // read test set
     aslp_std::Feature* tests = new aslp_std::Feature[test_size];
     aslp_std::Feature* querys = new aslp_std::Feature[query_size];
+    int *querys_break = new int[query_size];
     
     ReadData(tests, test_dir, test_list, test_size, feature_type);
-    ReadData(querys, query_dir, query_list, query_size, feature_type);
-    if (do_mvn) {
-        MVN(tests, test_size);
-        MVN(querys, query_size);
-    }
+    ReadQueryData(querys, querys_break, query_dir, query_list, query_size, feature_type);
 
-    if (distance_type.find("cos") != std::string::npos ) { 
-        NormalizeFeature(tests, test_size);
-        NormalizeFeature(querys, query_size);
-    }
+    NormalizeFeature(tests, test_size);
+    NormalizeFeature(querys, query_size);
 
     //debug the function of score_for_one_query()
     for (int i = 0; i < query_size; i++){
@@ -137,6 +157,7 @@ int main(int argc, char *argv[]) {
     
     delete [] tests;
     delete [] querys;
+    delete [] querys_break;
     return EXIT_SUCCESS;
 }
 

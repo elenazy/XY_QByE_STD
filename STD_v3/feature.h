@@ -43,6 +43,8 @@ public:
     void DoMVN();
    
     void ReadData(std::string feature_dir, std::string feature_id, std::string feature_type);
+    
+    void ReadData(std::string feature_dir, std::string feature_id, std::string feature_type, infra::matrix &mat);
 
     void WriteData(std::string feature_dir);     
 

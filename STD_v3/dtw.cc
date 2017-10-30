@@ -487,20 +487,20 @@ float I_DTW(float epsilon, const infra::matrix &dist, infra::vector &area) {
             dist_tmp(height + 1, j) = epsilon;
         }
         epsilon = subsequence_DTW_c2(dist_tmp, area);
-        std::cout << "iteration: " << counter << ", epsilon: " << epsilon << ", start frame: " << area(0) << ", end frame: " << area(1) << std::endl;
+        // std::cout << "iteration: " << counter << ", epsilon: " << epsilon << ", start frame: " << area(0) << ", end frame: " << area(1) << std::endl;
         if (epsilon > 1) {
             std::cout << "too short utterances: (" << width  << " vs " 
                       << height << ")" << std::endl;
             break;
         }
         counter++;
-        if (counter > MAX_ITERATION) {
-            std::cout << "exceed maximum iterations: " << counter << std::endl;
-            std::cout << "precision: " << best_epsilon - epsilon << std::endl;
+        if (counter >= MAX_ITERATION) {
+            //std::cout << "exceed maximum iterations: " << counter << std::endl;
+            //std::cout << "precision: " << best_epsilon - epsilon << std::endl;
             break;
         }
     }
-    std::cout << std::endl;
+    //std::cout << std::endl;
     return epsilon;
 }
 

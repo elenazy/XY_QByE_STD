@@ -117,6 +117,8 @@ if __name__=="__main__":
         cost_list.append(score_list)
     evaluate_matrix = evaluate(cost_list, keyword_list, test_list, occurance_dict, syllable_num_dict)
     for x in matrix_list:
+        if len(evaluate_matrix[x])==0:
+            continue
         output = np.array(evaluate_matrix[x]).mean(axis=0)
         MAP = output[0]
         PatN = output[1]

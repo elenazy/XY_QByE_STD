@@ -1,6 +1,7 @@
 import sys
 import numpy as np
-
+intance_num=33
+intance_num_list = [1,2,4,8,12,16,24,32]
 class Result():
     __search_data=None
     __map_results=[]
@@ -23,7 +24,7 @@ class Result():
         self.__pat5_results[template_id].append(Pat5)
 
     def get_summery_out(self):
-        for i in range(10):
+        for i in range(intance_num):
             if self.__map_results[i] == []:
                 for j in range(5):
                     self.__map_results[i].append(0);
@@ -43,7 +44,7 @@ if __name__=="__main__":
 
     result_all = {}
     for data_type in ["15_30", "40_55", "65_80"]:
-        result_all[data_type]=Result(data_type, 10)
+        result_all[data_type]=Result(data_type, intance_num)
 
     for line in open(sys.argv[1]).readlines():
         if line.find("/home/disk1/jyhou/feats/XiaoYing_STD") >= 0:
@@ -52,12 +53,12 @@ if __name__=="__main__":
             data_field = fields[7]
             
             fields = keyword_field.split("_")
-            template_num = fields[4]
-            random_num = fields[5]
+            template_num = fields[5]
+            random_num = fields[6]
 
             fields = data_field.split("_")
             data_type = "_".join(fields[-3:-1])
-        elif line.find("all keyword") >= 0:
+        elif line.find("unigram keyword") >= 0:
             fields = line.strip().split(" ")
             MAP = float(fields[2].strip().split("=")[1])
             PatN = float(fields[3].strip().split("=")[1])
@@ -70,9 +71,9 @@ if __name__=="__main__":
     for data_type in result_all.keys():
         summery_result = result_all[data_type].get_summery_out()
         fid.writelines(data_type + "\n")
-        for i in range(10):
+        for i in intance_num_list:
             for j in range(3):
                 for k in range(3):
-                    fid.writelines("%f\t"%(summery_result[k][j][i]))
+                    fid.writelines("%f\t"%(summery_result[k][j][i-1]))
             fid.writelines("\n")
     fid.close()

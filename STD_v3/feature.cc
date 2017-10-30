@@ -60,6 +60,15 @@ void Feature::ReadData(std::string feature_dir, std::string feature_id, std::str
     }
 }
 
+void Feature::ReadData(std::string feature_dir, std::string feature_id, std::string feature_type, infra::matrix &feature) {
+    this->feature_id_ = feature_id;
+    this->feature_type_ = feature_type;
+    int height = feature.height();
+    int dim = feature.width();
+    this->feature_.resize(height, dim);
+    this->feature_ = feature;
+}
+
 void Feature::WriteData(std::string feature_dir) {
     std::string test_filename(feature_dir + this->feature_id_ + "." + this->feature_type_);
     if (!write_htk(test_filename, this->feature_)) {

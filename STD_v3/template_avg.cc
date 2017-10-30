@@ -77,10 +77,7 @@ void TemplateAverage(aslp_std::Feature *querys, std::map< std::string, std::vect
     for (it=uniq_query_map.begin(); it != uniq_query_map.end(); it++) {
         infra::matrix feature_avg;
         TemplateAverageForOneQuery(querys, it->second, feature_avg);
-        aslp_std::Feature feature_avg_object(out_dir, it->first + "_n", feature_type, feature_avg);
-        if (it->first == "service") {
-            int i=0;
-        }
+        aslp_std::Feature feature_avg_object(out_dir, it->first, feature_type, feature_avg);
         std::cout << it->first << " " <<(it->second).size() << std::endl;
         feature_avg_object.WriteData(out_dir);
     }

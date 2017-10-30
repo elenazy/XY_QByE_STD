@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <thread>
+#include "util.h"
 #include "infra.h"
 #include "htkfile.h"
 #include "dataset.h"
@@ -29,8 +30,7 @@ using namespace std;
 //output: test //the out put matrix
 int score_for_one_query(aslp_std::Feature &query, aslp_std::Feature* tests, int test_size, 
                         string distance_type, string result_dir) {
-    //normal DTW  
-     
+    //normal DTW   
     std::string query_id = query.GetFeatureId();
     infra::matrix query_feature = query.GetFeature();
     ofstream ofs((result_dir + query_id + ".RESULT").c_str());
@@ -44,21 +44,7 @@ int score_for_one_query(aslp_std::Feature &query, aslp_std::Feature* tests, int 
         infra::matrix dist(height, width);
         infra::vector area(2);    
         aslp_std::ComputeDist(query_feature, test_feature, dist, distance_type);
-        // cout << "query id: " << query_id << ", length: " << height << endl;
-        // cout << "utterance id: " << tests[i].GetFeatureId() << ", length: " << width <<endl;
-  /*      int p,q;
-        ofstream out;
-        out.open(query_id+"_"+tests[i].GetFeatureId()+"_distance.txt", ios::out);
-
-        for (p = 0; p < height; p++) {
-            for (q = 0; q < width; q++) {
-               out << dist(p,q)  << " ";
-            }
-            out << endl;
-        }
-        out.close();
-    */    
-        float score = aslp_std::I_DTW(0, dist, area);
+        float score = aslp_std::SLN_DTW_c2(dist, area);
         ofs << score << " " << area(0) << " " << area(1) << endl;
     }
     ofs.close();
@@ -82,6 +68,29 @@ void ReadData(aslp_std::Feature* features, string feature_dir, StringVector &fea
         features[i].ReadData(feature_dir, feature_list[i], feature_type); 
     }
 }
+
+void ReadQueryData(aslp_std::Feature *features, string feature_dir, StringVector &feature_list, int feature_list_size, string feature_type) {
+    for (int i=0; i < feature_list_size; i++) {
+        std::vector <std::string> words = aslp_std::Split(feature_list[i], "-");
+        aslp_std::Feature f1;
+        aslp_std::Feature f2;
+        f1.ReadData(feature_dir, words[0], feature_type);
+        f2.ReadData(feature_dir, words[1], feature_type);
+        infra::matrix mat1 = f1.GetFeature();
+        infra::matrix mat2 = f2.GetFeature();
+        int h1 = mat1.height();
+        int h2 = mat2.height();
+        infra::matrix mat(h1+h2, mat1.width());
+        for (int j = 0; j < h1; j++) {
+            mat.row(j) = mat1.row(j);
+        }
+        for (int j = h1; j < h1+h2; j++) {
+            mat.row(j) = mat2.row(j-h1);
+        }
+        features[i].ReadData(feature_dir, feature_list[i], feature_type, mat); 
+    }
+}
+
 int main(int argc, char *argv[]) {    
     if(argc < 9) {
         cerr<<"USAGE: query_dir query_list_file test_dir test_list_file feature_type distance_type doMvn result_dir" << endl;
@@ -119,16 +128,9 @@ int main(int argc, char *argv[]) {
     aslp_std::Feature* querys = new aslp_std::Feature[query_size];
     
     ReadData(tests, test_dir, test_list, test_size, feature_type);
-    ReadData(querys, query_dir, query_list, query_size, feature_type);
-    if (do_mvn) {
-        MVN(tests, test_size);
-        MVN(querys, query_size);
-    }
-
-    if (distance_type.find("cos") != std::string::npos ) { 
-        NormalizeFeature(tests, test_size);
-        NormalizeFeature(querys, query_size);
-    }
+    ReadQueryData(querys, query_dir, query_list, query_size, feature_type);
+    NormalizeFeature(tests, test_size);
+    NormalizeFeature(querys, query_size);
 
     //debug the function of score_for_one_query()
     for (int i = 0; i < query_size; i++){

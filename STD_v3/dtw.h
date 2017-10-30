@@ -30,7 +30,7 @@ namespace aslp_std {
 
 #define LEN_PENALTY_DIAG 2
 #define BIG_FLT 1e100
-#define MAX_ITERATION 10
+#define MAX_ITERATION 3
 float DTW(const infra::matrix &dist);
 
 float DTWWithPath(const infra::matrix &dist, infra::matrix &path);

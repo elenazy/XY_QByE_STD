@@ -1,6 +1,6 @@
 
 # headers:
-ver    =debug
+ver    = #debug
 
 HDRS    = infra.h \
 	htkfile.h \
@@ -33,13 +33,19 @@ OBJS = $(SRCS:.cc=.o)
 
 #==========================================================#
 
-all: dtw_std i_dtw_std template_avg template_avg_hierarchical template_avg_alitolong template_avg_forget
+all: dtw_std dtw_std_phrase i_dtw_std i_dtw_std_phrase template_avg template_avg_hierarchical template_avg_alitolong template_avg_forget
 
 dtw_std: dtw_std.o $(OBJS) 
 	$(CC) dtw_std.o $(OBJS) $(LFLAGS) -o dtw_std
 
+dtw_std_phrase: dtw_std_phrase.o $(OBJS) 
+	$(CC) dtw_std_phrase.o $(OBJS) $(LFLAGS) -o dtw_std_phrase
+
 i_dtw_std: i_dtw_std.o $(OBJS) 
 	$(CC) i_dtw_std.o $(OBJS) $(LFLAGS) -o i_dtw_std
+
+i_dtw_std_phrase: i_dtw_std_phrase.o $(OBJS) 
+	$(CC) i_dtw_std_phrase.o $(OBJS) $(LFLAGS) -o i_dtw_std_phrase
 
 template_avg: template_avg.o $(OBJS)
 	$(CC) template_avg.o $(OBJS) $(LFLAGS) -o template_avg
